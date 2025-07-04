@@ -38,7 +38,7 @@ class FamilyStructure:
         generated_id = self._next_id
         self._next_id += 1
         return generated_id
-
+# AÑADIR MIEMBRO(EN ESTE CASO EN EL VALOR DE LAST NAME NO SE DA EL VALOR, YA QUE LA  PROPIEDAD DE LAST NAME FAMILIA NO CAMBIA)
     def add_member(self, member):
         ## You have to implement this method
         ## Append the member to the list of _members
@@ -54,7 +54,7 @@ class FamilyStructure:
        
         
         pass
-
+# BORRAR MIEMBRO
     def delete_member(self, id):
         ## You have to implement this method
         ## Loop the list and delete the member with the given id
@@ -62,19 +62,20 @@ class FamilyStructure:
         for member in self._members:
             if member["id"] != id:
                 new_list.append(member)
-        print(new_list)
-        
+      
+        self._members = new_list
         pass
-
+# BUSCAR MIEMBRO
     def get_member(self, id):
         ## You have to implement this method
         ## Loop all the members and return the one with the given id
         new_list =[]
         for member in self._members:
             if member["id"] == id:
-                new_list.append(member)
-        print(new_list)
-        pass
+                new_list = member
+                
+        return new_list       
+    pass   
 
     # This method is done, it returns a list with all the family members
     def get_all_members(self):
