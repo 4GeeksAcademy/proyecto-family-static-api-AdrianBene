@@ -30,16 +30,66 @@ def sitemap():
 
 
 @app.route('/members', methods=['GET'])
-def handle_hello():
+def get_api():
     # This is how you can use the Family datastructure by calling its methods
-    members = jackson_family.get_all_members()
-    response_body = {"hello": "world",
-                     "family": members}
+    response_body = jackson_family.get_all_members()
+    if response_body is None:
+        return 'fallo en la solicitud',404
+
+
     return jsonify(response_body), 200
 
 
+# PARA AÑADIR UN MIEMBRO A LA API
+@app.route('/members', methods=['POST'])
+def add_memberApi():
+    response_body = jackson_family.get_all_members()
+    
+    if len(response_body) == 5:
+        return "El cuerpo de la solicitud es null", 400
 
+
+     
+
+    request_body = request.get_json()
+    # hacer validaciones de los datos aportados
+    if request_body is None:
+        return "El cuerpo de la solicitud es null", 400
+    if 'first_name' not in request_body:
+        return 'Debes especificar el name', 400
+    if 'last_name' not in request_body:
+        return 'Debes especificar el last name', 400
+    if 'age' not in request_body:
+        return 'Debes especificar el age', 400
+    if 'lucky_numbers' not in request_body:
+        return 'Debes especificar el lucky numbers', 400
+
+    jackson_family.add_member(request_body)
+    return jsonify(request_body),200
+
+
+@app.route('/members/<int:id>', methods=['DELETE'])
+def delete_todo(id):
+    if id is None:
+        return 'El cuerpo de la solicitud es null', 400
+
+
+    jackson_family.delete_member(id)
+    return jsonify({"msg":"borrado"}), 200
+
+@app.route('/members/<int:id>', methods=['GET'])
+def find_member(id):
+    response_body = jackson_family.get_member(id)
+
+    if id is None:
+        return 'El cuerpo de la solicitud es null', 400
+
+   
+    return jsonify(response_body),200
+    
+  
+    
 # This only runs if `$ python src/app.py` is executed
-if __name__ == '__main__':
-    PORT = int(os.environ.get('PORT', 3000))
-    app.run(host='0.0.0.0', port=PORT, debug=True)
+    if __name__ == '__main__':
+        PORT = int(os.environ.get('PORT', 3000))
+        app.run(host='0.0.0.0', port=PORT, debug=True)
